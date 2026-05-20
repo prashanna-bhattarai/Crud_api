@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// 3. READ SPECIFIC - Get one user by id (for stalking 😄)
+// 3. READ SPECIFIC - Get one user by id
 router.get("/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -57,26 +57,28 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 });
-// Search by name
-router.get('/search/name/:name', async (req, res) => {
+// READ by name
+router.get("/name/:name", async (req, res) => {
   try {
-    const users = await User.find({ 
-      name: { $regex: req.params.name, $options: 'i' } 
+    const users = await User.find({
+      name: { $regex: req.params.name, $options: "i" },
     });
     if (users.length === 0) {
-      return res.status(404).json({ msg: 'No user found with that name' });
+      return res.status(404).json({ msg: "No user found with that name" });
     }
     res.json(users);
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
 });
-// Search by phone
-router.get('/search/phone/:phone', async (req, res) => {
+// READ by phone
+router.get("/phone/:phone", async (req, res) => {
   try {
     const user = await User.findOne({ phone: req.params.phone });
     if (!user) {
-      return res.status(404).json({ msg: 'No user found with that phone number' });
+      return res
+        .status(404)
+        .json({ msg: "No user found with that phone number" });
     }
     res.json(user);
   } catch (err) {
@@ -84,15 +86,15 @@ router.get('/search/phone/:phone', async (req, res) => {
   }
 });
 // Update by name
-router.put('/update/name/:name', async (req, res) => {
+router.put("/name/:name", async (req, res) => {
   try {
     const updatedUser = await User.findOneAndUpdate(
-      { name: { $regex: req.params.name, $options: 'i' } },
+      { name: { $regex: req.params.name, $options: "i" } },
       req.body,
-      { new: true }
+      { new: true },
     );
     if (!updatedUser) {
-      return res.status(404).json({ msg: 'No user found with that name' });
+      return res.status(404).json({ msg: "No user found with that name" });
     }
     res.json(updatedUser);
   } catch (err) {
